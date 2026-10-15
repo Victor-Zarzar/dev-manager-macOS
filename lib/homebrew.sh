@@ -13,8 +13,11 @@ install_homebrew() {
         return 0
     fi
 
+    # The non-interactive installer never asks for a password: sudo must already
+    # be cached, otherwise it aborts with "Insufficient permissions to install".
+    ensure_sudo || return 1
+
     print_info "Running the official Homebrew installer (non-interactive)..."
-    print_info "You may be prompted for your macOS account password (sudo) - that prompt is normal."
 
     # NONINTERACTIVE=1 makes Homebrew's installer skip its "Press RETURN to
     # continue or any other key to abort" prompt. This matters here: run_command

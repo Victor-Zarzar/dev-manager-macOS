@@ -19,6 +19,7 @@ source "$LIB_DIR/shell-tools.sh"
 source "$LIB_DIR/databases.sh"
 source "$LIB_DIR/apps.sh"
 source "$LIB_DIR/dev-tools.sh"
+source "$LIB_DIR/mas-apps.sh"
 source "$LIB_DIR/python-tools.sh"
 source "$LIB_DIR/flutter-tools.sh"
 source "$LIB_DIR/git-config.sh"
@@ -43,11 +44,12 @@ show_menu() {
     echo "7)  Install databases (SQLite, Redis, MySQL, PostgreSQL, Supabase, Firebase)"
     echo "8)  Install applications (LocalSend, Orion, Zed, Notion...)"
     echo "9)  Install development tools (Git, NVM, Nmap, Mackup, mas, OpenJDK 21...)"
-    echo "10) Install Python tools (Pyenv, Virtualenv)"
-    echo "11) Install Flutter tools (FVM)"
-    echo "12) Configure Git"
-    echo "13) Configure Xcode"
-    echo "14) View installation log"
+    echo "10) Install Mac App Store apps (mas: Xcode, DaVinci, WhatsApp...)"
+    echo "11) Install Python tools (Pyenv, Virtualenv)"
+    echo "12) Install Flutter tools (FVM)"
+    echo "13) Configure Git"
+    echo "14) Configure Xcode"
+    echo "15) View installation log"
     echo "0)  Exit"
     echo ""
     echo -n "Choose an option: "
@@ -69,10 +71,13 @@ run_full_setup() {
     install_databases
     install_apps
     install_development_tools
+    install_mas_apps
     install_python_tools
     install_flutter_tools
     configure_git
-    configure_xcode
+    # Already done right after Xcode was installed (see install_mas_apps) -
+    # only run it here if that didn't happen
+    [ "$XCODE_CONFIGURED" = true ] || configure_xcode
 
     echo ""
     print_section "Setup Summary"
@@ -96,6 +101,12 @@ main() {
         exit 1
     fi
 
+    # Ask for the password once, up front (kept alive for the whole run)
+    if ! ensure_sudo; then
+        print_error "Administrator access is required. Aborting."
+        exit 1
+    fi
+
     touch "$LOG_FILE"
     detect_os
     log_action "Starting setup script"
@@ -114,11 +125,12 @@ main() {
             7) install_databases ;;
             8) install_apps ;;
             9) install_development_tools ;;
-            10) install_python_tools ;;
-            11) install_flutter_tools ;;
-            12) configure_git ;;
-            13) configure_xcode ;;
-            14) cat "$LOG_FILE" | less ;;
+            10) install_mas_apps ;;
+            11) install_python_tools ;;
+            12) install_flutter_tools ;;
+            13) configure_git ;;
+            14) configure_xcode ;;
+            15) cat "$LOG_FILE" | less ;;
             0)
                 print_success "Goodbye!"
                 log_action "Script finished"

@@ -187,6 +187,53 @@ clean_path_confirm() {
 }
 
 # ============================================
+# Sudo: ask once, keep it alive for the whole run
+# ============================================
+# Why: Homebrew's non-interactive installer will NOT prompt for a password - it
+# just fails with "Insufficient permissions" if sudo isn't already cached. Also,
+# sudo's cache expires after ~5 min, and big steps (Xcode download) easily outlast it.
+
+SUDO_KEEPALIVE_PID=""
+
+start_sudo_keepalive() {
+    if [ -n "$SUDO_KEEPALIVE_PID" ] && kill -0 "$SUDO_KEEPALIVE_PID" 2>/dev/null; then
+        return 0
+    fi
+
+    # Refreshes the sudo timestamp every 50s; exits on its own if the script dies.
+    (
+        while true; do
+            sudo -n true 2>/dev/null
+            sleep 50
+            kill -0 "$$" 2>/dev/null || exit 0
+        done
+    ) &
+    SUDO_KEEPALIVE_PID=$!
+    disown "$SUDO_KEEPALIVE_PID" 2>/dev/null
+    trap 'stop_sudo_keepalive' EXIT
+}
+
+stop_sudo_keepalive() {
+    if [ -n "$SUDO_KEEPALIVE_PID" ]; then
+        kill "$SUDO_KEEPALIVE_PID" 2>/dev/null
+        SUDO_KEEPALIVE_PID=""
+    fi
+}
+
+ensure_sudo() {
+    if ! sudo -n true 2>/dev/null; then
+        print_info "Administrator password needed once - it stays cached for the whole run."
+        if ! sudo -v; then
+            print_error "Could not get administrator (sudo) access"
+            log_action "FAILED: sudo authentication"
+            return 1
+        fi
+    fi
+    start_sudo_keepalive
+    return 0
+}
+
+# ============================================
 # macOS version detection
 # ============================================
 get_os_version() {

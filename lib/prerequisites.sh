@@ -26,15 +26,12 @@ check_prerequisites() {
     fi
 
     if [ -d /Applications/Xcode.app ]; then
-        local license_status
-        license_status=$(sudo xcodebuild -checkFirstLaunchStatus 2>&1)
-        if echo "$license_status" | grep -qi "not agreed\|license"; then
-            print_warning "Xcode license not yet accepted - run setup.sh option 13 (Configure Xcode)"
-        else
-            print_success "Xcode license already accepted"
+        print_info "Xcode.app found - accepting the license now so later steps don't fail on it"
+        if ! ensure_xcode_ready; then
+            print_warning "Could not finish Xcode setup - run setup.sh option 14 (Configure Xcode) manually"
         fi
     else
-        print_info "Xcode.app not installed (only Command Line Tools) - that's fine for most CLI development"
+        print_info "Xcode.app not installed yet - its license is accepted right after it's installed from the App Store"
     fi
 
     local free_gb

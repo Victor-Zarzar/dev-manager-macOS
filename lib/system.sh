@@ -31,6 +31,10 @@ update_system() {
         run_command "brew update" "Homebrew formulae/casks index updated"
         run_command "brew upgrade" "Installed formulae upgraded"
         run_command "brew upgrade --cask" "Installed casks upgraded"
+
+        if command_exists mas; then
+            run_command "mas upgrade" "Mac App Store apps upgraded"
+        fi
     else
         print_warning "Homebrew not installed - run setup.sh option 3 first"
     fi

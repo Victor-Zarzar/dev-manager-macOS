@@ -15,6 +15,11 @@ A modular, idempotent automated **setup + maintenance** toolkit for macOS, follo
 - **Freed-space reporting**: Cleaning operations report roughly how much disk space each step freed
 - **Safety first (maintenance.sh)**: destructive or irreversible cleanups (Xcode Archives, CocoaPods spec repos, Docker volumes, Turbo caches, orphaned `node_modules`, IPSW firmware files) always ask for confirmation before deleting anything
 
+## How sudo and the Xcode license are handled (setup.sh)
+
+- **Password once, up front:** `setup.sh` asks for your administrator password at launch and keeps it cached (background keep-alive) until the script exits. This matters because Homebrew's non-interactive installer never prompts for a password, and long steps (Xcode download) would otherwise outlast sudo's 5-minute cache.
+- **Xcode license accepted as early as possible:** if `Xcode.app` already exists, the license/first-launch is handled during the prerequisites check. On a fresh Mac, Xcode doesn't exist yet, so it's handled **immediately after it's installed from the App Store** (end of the Mac App Store step) - before any later Homebrew step (pyenv, fvm, Android Studio) can fail on it.
+
 ## Requirements
 
 - macOS (any recent version)
@@ -55,6 +60,7 @@ dev-manager-macos/
 │   ├── shell-tools.sh       # Starship, iTerm2, zsh-autosuggestions, eza, zoxide, bat
 │   ├── databases.sh         # SQLite, MySQL, Redis, PostgreSQL, Supabase, Firebase CLI
 │   ├── apps.sh              # GUI applications (casks)
+│   ├── mas-apps.sh          # Mac App Store apps via mas (edit the MAS_APPS list)
 │   ├── dev-tools.sh         # Git, NVM, PNPM, Bun, CocoaPods, Nginx, OpenJDK 21, kubectl, Minikube, k9s, mas, Mackup
 │   ├── python-tools.sh      # Pyenv, Virtualenv
 │   ├── flutter-tools.sh     # FVM, Android Studio
@@ -93,11 +99,12 @@ dev-manager-macos/
 7)  Install databases (SQLite, Redis, MySQL, PostgreSQL, Supabase, Firebase)
 8)  Install applications (LocalSend, Orion, Zed, Notion...)
 9)  Install development tools (Git, NVM, Nmap, Mackup, mas, OpenJDK 21...)
-10) Install Python tools (Pyenv, Virtualenv)
-11) Install Flutter tools (FVM)
-12) Configure Git
-13) Configure Xcode
-14) View installation log
+10) Install Mac App Store apps (mas: Xcode, DaVinci, WhatsApp...)
+11) Install Python tools (Pyenv, Virtualenv)
+12) Install Flutter tools (FVM)
+13) Configure Git
+14) Configure Xcode
+15) View installation log
  0) Exit
 ```
 
@@ -132,6 +139,7 @@ A full setup aborts early if `check_prerequisites` fails (missing Xcode Command 
 ## What Gets Cleaned
 
 ### System
+
 - **User caches**: `~/Library/Caches` swept entirely (this is where most apps, including browsers/IDEs, keep their cache — the dedicated browser/IDE/app modules mostly target `Application Support` caches that live outside this folder)
 - **Logs & diagnostics**: `~/Library/Logs`, `/Library/Logs/DiagnosticReports`
 - **Xcode**: DerivedData, iOS DeviceSupport symbol files (auto re-downloaded per iOS version), Archives (asks for confirmation - these are needed to re-submit past App Store builds)
@@ -140,6 +148,7 @@ A full setup aborts early if `check_prerequisites` fails (missing Xcode Command 
 - **System assets**: `/Library/Assets/com_apple_MobileAsset_*` (iWork templates etc.), iCloud CloudKit cache, optional Spotlight index rebuild (asks for confirmation - search is briefly unavailable while it rebuilds)
 
 ### Development Tools
+
 - **Xcode & iOS Simulator**: DerivedData, unavailable simulator devices (`simctl delete unavailable`), CoreSimulator cache
 - **iOS Firmware (IPSW)**: scans known Finder/iTunes cache locations, asks for confirmation before deleting (each file is 3-11 GB)
 - **Android Studio & Emulator**: AVD caches, build cache, IDE caches/logs, Gradle cache and wrapper distributions
@@ -149,10 +158,12 @@ A full setup aborts early if `check_prerequisites` fails (missing Xcode Command 
 - **Python**: lists pyenv versions for manual review, `pip cache purge`, sweeps `__pycache__` under `~/Projects`
 
 ### Mobile Development
+
 - **Flutter/Dart/FVM**: Dart pub cache, DevTools cache; reports FVM's cached SDK sizes (not deleted automatically)
 - **Expo/React Native**: Expo CLI cache, EAS CLI cache, Watchman watches, Metro bundler cache, React Native Android build artifacts (with confirmation)
 
 ### Node.js Ecosystem
+
 - **NPM/NVM**: npm cache, NVM download cache
 - **Bun**: install cache, global cache, logs older than 7 days
 - **PNPM**: `pnpm store prune`
@@ -162,11 +173,13 @@ A full setup aborts early if `check_prerequisites` fails (missing Xcode Command 
 - **Orphaned `node_modules`**: scans `~/Projects` for `node_modules` untouched for 30+ days, lists total size, asks for confirmation before deleting
 
 ### Browsers, IDEs & Apps
+
 - **Browsers**: Chrome, Safari (cache only), Orion, Firefox, Brave, Arc, Edge
 - **IDEs**: JetBrains IDEs (IntelliJ, WebStorm, PyCharm, GoLand, CLion, DataGrip, RubyMine, Rider), VS Code, Zed Editor
 - **Apps**: Slack, Discord, Spotify (everything else is already covered by the generic `~/Library/Caches` sweep)
 
 ### Other
+
 - **Storage**: downloads older than 30 days, Trash, Time Machine local snapshots (thinned via `tmutil`), Photos app cache
 - **Docker/OrbStack**: unused containers, images, networks, build cache; volumes only with confirmation
 - **CrossOver**: its own cache/logs cleaned automatically; Wine bottles are only reported (they hold installed Windows apps' data) and left for you to remove manually

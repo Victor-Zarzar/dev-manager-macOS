@@ -25,6 +25,7 @@ install_development_tools() {
     brew_install "derailed/k9s/k9s" "k9s"
     brew_install "mas" "mas (Mac App Store CLI)"
     brew_install "mackup" "Mackup (app settings backup)"
+    brew_install "ffmpeg" "FFmpeg"
 
     # Bun's own official tap, per upstream install instructions
     if command_exists bun; then

@@ -7,7 +7,7 @@
 install_flutter_tools() {
     print_section "Installing Flutter Tools"
 
-    brew_install "leoafarias/fvm/fvm" "FVM (Flutter Version Manager)"
+    brew_install "btwld/fvm/fvm" "FVM (Flutter Version Manager)"
     brew_cask_install "android-studio" "Android Studio"
 
     print_info "Xcode (for iOS builds) is configured separately - see setup.sh option 13"

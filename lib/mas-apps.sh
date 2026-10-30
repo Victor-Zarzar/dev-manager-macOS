@@ -26,6 +26,7 @@ MAS_APPS=(
     "1494451650|VN"
     "310633997|WhatsApp"
     "497799835|Xcode|heavy"
+    "1475387142|Tailscale"
 )
 
 # Returns 0 if the app is already installed: either mas knows it, or an app

@@ -97,7 +97,7 @@ dev-manager-macos/
 5)  Install fonts (Nerd Fonts)
 6)  Install shell tools (Starship, iTerm2, Eza, Zoxide...)
 7)  Install databases (SQLite, Redis, MySQL, PostgreSQL, Supabase, Firebase)
-8)  Install applications (LocalSend, Orion, Zed, Notion...)
+8)  Install applications (LocalSend, Orion, Firefox, Chrome, Zed, Notion...)
 9)  Install development tools (Git, NVM, Nmap, Mackup, mas, OpenJDK 21...)
 10) Install Mac App Store apps (mas: Xcode, DaVinci, WhatsApp...)
 11) Install Python tools (Pyenv, Virtualenv)

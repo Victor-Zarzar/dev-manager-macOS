@@ -11,6 +11,8 @@ install_apps() {
     brew_cask_install "zed" "Zed Editor"
     brew_cask_install "sublime-text" "Sublime Text"
     brew_cask_install "orion" "Orion Browser"
+    brew_cask_install "firefox" "Firefox"
+    brew_cask_install "google-chrome" "Google Chrome"
 
     # Communication
     brew_cask_install "telegram" "Telegram"

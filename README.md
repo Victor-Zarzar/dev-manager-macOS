@@ -81,7 +81,7 @@ dev-manager-macos/
 │   ├── expo-clean.sh        # Expo/React Native/Metro/Watchman caches
 │   ├── devtools-clean.sh    # Homebrew, CocoaPods, Ruby, Python toolchain cleaning
 │   ├── assets-clean.sh      # AssetsV2/iWork templates, iCloud cache, Spotlight rebuild
-│   ├── browser-clean.sh     # Chrome, Safari, Orion, Firefox, Brave, Arc, Edge caches
+│   ├── browser-clean.sh     # Chrome, Safari, Firefox, Brave, Arc, Edge caches
 │   ├── ide-clean.sh         # JetBrains IDEs, VS Code, Zed Editor caches
 │   └── apps-clean.sh        # Slack, Discord, Spotify caches
 └── README.md

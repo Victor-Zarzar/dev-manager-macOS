@@ -42,7 +42,7 @@ show_menu() {
     echo "5)  Install fonts (Nerd Fonts)"
     echo "6)  Install shell tools (Starship, iTerm2, Eza, Zoxide...)"
     echo "7)  Install databases (SQLite, Redis, MySQL, PostgreSQL, Supabase, Firebase)"
-    echo "8)  Install applications (LocalSend, Orion, Zed, Notion...)"
+    echo "8)  Install applications (LocalSend, Zed, Notion...)"
     echo "9)  Install development tools (Git, NVM, Nmap, Mackup, mas, OpenJDK 21...)"
     echo "10) Install Mac App Store apps (mas: Xcode, DaVinci, WhatsApp...)"
     echo "11) Install Python tools (Pyenv, Virtualenv)"

@@ -23,7 +23,6 @@ MAS_APPS=(
     "1450874784|Transporter"
     "1278508951|Trello"
     "6745342698|uBlock Origin Lite"
-    "1494451650|VN"
     "310633997|WhatsApp"
     "497799835|Xcode|heavy"
     "1475387142|Tailscale"

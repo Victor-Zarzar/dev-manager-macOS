@@ -10,7 +10,6 @@ install_apps() {
     # Editors / browsers
     brew_cask_install "zed" "Zed Editor"
     brew_cask_install "sublime-text" "Sublime Text"
-    brew_cask_install "orion" "Orion Browser"
     brew_cask_install "firefox" "Firefox"
     brew_cask_install "google-chrome" "Google Chrome"
 
@@ -25,10 +24,13 @@ install_apps() {
     brew_cask_install "rectangle" "Rectangle (window manager)"
     brew_cask_install "shottr" "Shottr (screenshots)"
     brew_cask_install "figma" "Figma"
+    brew_cask_install "lightcraft" "LightCraft"
+    brew_cask_install "filmcraft" "FilmCraft"
 
     # Security / VPN
     brew_cask_install "protonvpn" "ProtonVPN"
     brew_cask_install "tunnelblick" "Tunnelblick"
+    brew_cask_install "cloudflare-warp" "Cloudflare WARP"
 
     # Utilities
     brew_cask_install "localsend" "LocalSend"
@@ -38,4 +40,7 @@ install_apps() {
 
     # Audio
     brew_cask_install "spotify" "Spotify"
+
+    # Bottles
+    brew_cask_install "crossover" "Crossover"
 }

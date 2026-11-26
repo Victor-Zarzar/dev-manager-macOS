@@ -28,9 +28,10 @@ install_apps() {
     brew_cask_install "filmcraft" "FilmCraft"
 
     # Security / VPN
-    brew_cask_install "protonvpn" "ProtonVPN"
+    brew_cask_install "nordvpn" "NordVPN"
     brew_cask_install "tunnelblick" "Tunnelblick"
     brew_cask_install "cloudflare-warp" "Cloudflare WARP"
+    brew_cask_install "bitwarden" "BitWarden"
 
     # Utilities
     brew_cask_install "localsend" "LocalSend"
